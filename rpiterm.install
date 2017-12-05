@@ -1,0 +1,7 @@
+lib: [
+  "_build/install/default/lib/rpiterm/META" {"META"}
+  "_build/install/default/lib/rpiterm/opam" {"opam"}
+]
+bin: [
+  "_build/install/default/bin/rpiterm" {"rpiterm"}
+]
