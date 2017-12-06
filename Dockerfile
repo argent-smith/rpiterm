@@ -14,6 +14,20 @@ RUN opam pin add core_kernel "https://github.com/argent-smith/core_kernel.git#v0
 
 RUN opam install core utop
 
-RUN opam install uri.1.9.2
+RUN opam pin add uri 1.9.2
 
 RUN opam install prometheus prometheus-app
+
+RUN echo "\neval `opam config env`" >> /home/dev/.bashrc
+
+USER dev
+
+RUN mkdir -p /home/dev/project
+
+VOLUME /home/dev/project
+
+WORKDIR /home/dev/project
+
+COPY --chown=dev . .
+
+RUN bash -l -c "jbuilder build @install && jbuilder install"
