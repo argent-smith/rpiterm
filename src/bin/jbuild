@@ -1,8 +1,12 @@
 ;; -*- mode: lisp; -*-
 (jbuild_version 1)
+
 (executable
  ((name rpiterm)
   (public_name rpiterm)
-  (libraries (prometheus
+  (modules (rpiterm))
+  (libraries (operations
+              prometheus
               prometheus-app.unix))
-  (preprocess (pps (lwt.ppx)))))
+  ;; (flags (-ccopt -static))
+ ))

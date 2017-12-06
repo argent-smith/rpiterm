@@ -1,0 +1,17 @@
+;; -*- mode: lisp; -*-
+(jbuild_version 1)
+
+(library
+ ((name thermometer)
+  (modules (thermometer))
+  (libraries (lwt))
+  (preprocess (pps (lwt.ppx)))))
+
+(library
+ ((name operations)
+  (modules (operations
+            metrics))
+  (libraries (thermometer
+              prometheus
+              prometheus-app.unix))
+  (preprocess (pps (lwt.ppx)))))
