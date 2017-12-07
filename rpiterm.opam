@@ -2,7 +2,7 @@ opam-version: "1.2"
 version: "0.0.1"
 maintainer: "Pavel Argentov <argentoff@gmail.com>"
 authors: ["Pavel Argentov <argentoff@gmail.com>"]
-license: "BSD"
+license: "Simplyfied BSD"
 build: [
   ["jbuilder" "build" "--only" "rpiterm" "--root" "." "-j" jobs "@install"]
 ]
