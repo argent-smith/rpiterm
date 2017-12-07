@@ -5,12 +5,11 @@ RUN opam switch 4.05.0+spacetime
 RUN eval `opam config env`
 RUN opam update
 RUN opam upgrade -y
-RUN opam pin add core_kernel "https://github.com/argent-smith/core_kernel.git#v0.9.1-ag"
-RUN opam install core utop
 RUN opam pin add uri 1.9.2
+RUN opam install prof_spacetime
 RUN opam install prometheus prometheus-app
-RUN echo "\neval `opam config env`" >> /home/dev/.bashrc
 USER dev
+RUN echo "\neval `opam config env`" >> /home/dev/.bashrc
 RUN mkdir -p /home/dev/project
 VOLUME /home/dev/project
 WORKDIR /home/dev/project
