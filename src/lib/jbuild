@@ -5,7 +5,10 @@
  ((name thermometer)
   (modules (thermometer))
   (libraries (lwt))
-  (preprocess (pps (lwt.ppx)))))
+  (preprocess (pps (lwt.ppx)))
+  (flags (-safe-string))
+  (ocamlopt_flags (-O2 -safe-string))
+  ))
 
 (library
  ((name operations)
@@ -14,4 +17,7 @@
   (libraries (thermometer
               prometheus
               prometheus-app.unix))
-  (preprocess (pps (lwt.ppx)))))
+  (preprocess (pps (lwt.ppx)))
+  (flags (-safe-string))
+  (ocamlopt_flags (-O2 -safe-string))
+  ))

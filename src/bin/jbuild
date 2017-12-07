@@ -4,9 +4,9 @@
 (executable
  ((name rpiterm)
   (public_name rpiterm)
-  (modules (rpiterm))
   (libraries (operations
               prometheus
               prometheus-app.unix))
-  ;; (flags (-ccopt -static))
+  (flags (-safe-string))
+  (ocamlopt_flags (-O2 -safe-string))
  ))
