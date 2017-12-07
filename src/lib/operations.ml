@@ -32,4 +32,4 @@ let main prometheus_config =
   setup_logging ();
   setup_signal_handling ();
   let threads = report_bootup () :: set_thermometer () :: Prometheus_unix.serve prometheus_config in
-  Lwt_main.run @@ Lwt.join threads
+  Lwt_main.run @@ join threads
