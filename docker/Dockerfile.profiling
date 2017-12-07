@@ -16,4 +16,5 @@ VOLUME /home/dev/project
 WORKDIR /home/dev/project
 COPY --chown=dev . .
 RUN bash -l -c "jbuilder build -j 4 @install && jbuilder install"
+RUN echo -n "36600" > fake_thermometer
 ENV OCAML_SPACETIME_INTERVAL=100

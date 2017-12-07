@@ -1,6 +1,8 @@
 open Lwt
 open Lwt.Infix
 
+let section = Lwt_log.Section.make "operations"
+
 let setup_logging () =
   let open Lwt_log in
   let template = "$(date).$(milliseconds) $(name)[$(pid)]: $(level)($(section)) => $(message)" in
@@ -15,21 +17,21 @@ let setup_signal_handling () =
   in ()
 
 let report_bootup () =
-  Lwt_log.info_f "Booting up"
+  Lwt_log.info_f ~section "Booting up"
 
-let get_thermometer_value () =
+let get_thermometer_value thermometer_file =
   let module T = Thermometer.Device(Thermometer.Linux) in
-  let%lwt thermometer_value = T.read_temperature () in
-  Lwt_log.info_f "Got thermometer value as %.3f" thermometer_value
+  let%lwt thermometer_value = T.read_temperature ~thermometer_file () in
+  Lwt_log.info_f ~section "Got thermometer value as %.3f" thermometer_value
   >> return thermometer_value
 
-let rec set_thermometer () =
+let rec set_thermometer thermometer_file =
   Lwt_unix.sleep 5.0
-  >> get_thermometer_value () >|= Prometheus.Gauge.set @@ Metrics.chip_temperature "soc_chip_temp"
-  >> set_thermometer ()
+  >> get_thermometer_value thermometer_file >|= Prometheus.Gauge.set @@ Metrics.chip_temperature "soc_chip_temp"
+  >> set_thermometer thermometer_file
 
-let main prometheus_config =
+let main thermometer_file prometheus_config =
   setup_logging ();
   setup_signal_handling ();
-  let threads = report_bootup () :: set_thermometer () :: Prometheus_unix.serve prometheus_config in
+  let threads = report_bootup () :: set_thermometer thermometer_file :: Prometheus_unix.serve prometheus_config in
   Lwt_main.run @@ join threads

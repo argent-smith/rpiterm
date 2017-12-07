@@ -3,7 +3,7 @@ open Lwt.Infix
 
 module Interface = struct
   module type S = sig
-    val read_temperature : unit -> float Lwt.t
+    val read_temperature : ?thermometer_file:string -> unit -> float Lwt.t
   end
 end
 
@@ -13,18 +13,23 @@ end
 
 module Mockup : Interface.S = struct
   (* Returns 36.6 *)
-  let read_temperature () = return @@ 36600.0 /. 1000.0
+  let read_temperature ?(thermometer_file = "/dev_zero") () =
+    return @@ 36600.0 /. 1000.0
 end
 
 module Linux : Interface.S = struct
-  let temp_file = "/sys/class/thermal/thermal_zone0/temp"
+  let section = Lwt_log.Section.make "linux system thermometer"
 
   (* Returns chipset temperature in Celsius as a float *)
-  let read_temperature () =
+  let read_temperature ?(thermometer_file = "/dev/zero") () =
     let open Lwt_io in
     let read_float channel =
       let%lwt str = read_line channel in
       return @@ (float_of_string str) /. 1000.0
     in
-    with_file ~mode:input temp_file read_float
+    try%lwt
+      with_file ~mode:input thermometer_file read_float
+    with
+    | Unix.(Unix_error(ENOENT, _, fname)) ->
+       Lwt_log.fatal_f ~section "Could not open file %s" fname >> fail_with "exiting..."
 end
