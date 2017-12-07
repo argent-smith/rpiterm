@@ -1,7 +1,6 @@
 FROM argentoff/ocaml-workbench:arm32v7-en-0.0.3 as builder
 LABEL maintainer="Pavel Argentov (argentoff@gmail.com)" \
-      "net.argentoff.prod.base"="rpiterm" \
-      arch="arm32v7"
+      "net.argentoff.prod.base"="rpiterm"
 RUN opam switch 4.05.0+flambda
 RUN eval `opam config env`
 RUN opam update
@@ -18,6 +17,7 @@ COPY --chown=dev . .
 RUN bash -l -c "jbuilder build -j 4 @install && jbuilder install"
 
 FROM arm32v7/debian:stretch-slim
+LABEL maintainer="Pavel Argentov (argentoff@gmail.com)"
 RUN addgroup prometheus
 RUN adduser \
     --system \

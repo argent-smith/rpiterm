@@ -1,7 +1,6 @@
 FROM argentoff/ocaml-workbench:amd64-en
 LABEL maintainer="Pavel Argentov (argentoff@gmail.com)" \
-      "net.argentoff.dev.base"="rpiterm" \
-      arch="amd64"
+      "net.argentoff.dev.base"="rpiterm"
 RUN opam switch 4.05.0+spacetime
 RUN eval `opam config env`
 RUN opam update
