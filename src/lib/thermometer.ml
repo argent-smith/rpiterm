@@ -13,7 +13,7 @@ end
 
 module Mockup : Interface.S = struct
   (* Returns 36.6 *)
-  let read_temperature ?(thermometer_file = "/dev_zero") () =
+  let read_temperature ?(thermometer_file = "/dev/zero") () =
     return @@ 36600.0 /. 1000.0
 end
 
