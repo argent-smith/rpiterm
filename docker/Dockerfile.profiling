@@ -1,3 +1,4 @@
+# -*- mode: dockerfile; -*-
 FROM argentoff/ocaml-workbench:amd64-en
 LABEL maintainer="Pavel Argentov (argentoff@gmail.com)" \
       "net.argentoff.dev.base"="rpiterm"
