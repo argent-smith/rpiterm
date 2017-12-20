@@ -14,7 +14,7 @@ end
 module Mockup : Interface.S = struct
   (* Returns 36.6 *)
   let read_temperature ?(thermometer_file = "/dev/zero") () =
-    return @@ 36600.0 /. 1000.0
+    return 36.6
 end
 
 module Linux : Interface.S = struct
@@ -32,4 +32,19 @@ module Linux : Interface.S = struct
     with
     | Unix.(Unix_error(ENOENT, _, fname)) ->
        Lwt_log.fatal_f ~section "Could not open file %s" fname >> fail_with "exiting..."
+end
+
+module Mirage : Interface.S = struct
+  (* Returns chipset temperature in Celsius as a float *)
+  let read_temperature ?(thermometer_file = "/dev/zero") () =
+    let open Lwt_io in
+    let read_float channel =
+      let%lwt str = read_line channel in
+      return @@ (float_of_string str) /. 1000.0
+    in
+    try%lwt
+      with_file ~mode:input thermometer_file read_float
+    with
+    | Unix.(Unix_error(ENOENT, _, fname)) ->
+       Log.err (fun f -> f "Could not open file %s" fname) >> return 0.0
 end
