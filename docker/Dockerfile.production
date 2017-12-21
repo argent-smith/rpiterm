@@ -1,13 +1,13 @@
 # -*- mode: dockerfile; -*-
-FROM argentoff/opam:arm32v7-ocaml-4.05.0-flambda as builder
-RUN opam pin add uri 1.9.2
+FROM argentoff/opam:arm64v8-ocaml-4.06.0-flambda as builder
 RUN opam install prometheus prometheus-app
 RUN mkdir -p /home/dev/project
 WORKDIR /home/dev/project
 COPY --chown=dev . .
-RUN sh -lc "jbuilder build -j 4 @install && jbuilder install"
+RUN mv -f src/bin/jbuild.static src/bin/jbuild
+RUN sh -lc "jbuilder build @install && jbuilder install"
 
-FROM arm32v7/busybox:1.27.2
+FROM arm64v8/busybox:1.27.2
 LABEL maintainer="Pavel Argentov (argentoff@gmail.com)"
 RUN addgroup -S prometheus \
     && adduser \
@@ -16,7 +16,6 @@ RUN addgroup -S prometheus \
        -H \
        -G prometheus \
        prometheus
-COPY --from=builder /lib/arm-linux-gnueabihf /lib/
-COPY --from=builder /home/dev/.opam/4.05.0+flambda/bin/rpiterm /bin
+COPY --from=builder /home/dev/.opam/4.06.0+flambda/bin/rpiterm /bin
 USER prometheus
 ENTRYPOINT ["/bin/rpiterm"]
