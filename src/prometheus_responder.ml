@@ -1,4 +1,7 @@
 module Server (CON : Conduit_mirage.S) = struct
+  let log_src = Logs.Src.create "prometheus_responder" ~doc:"Prometheus metrics server"
+  module Log = Logger.Instance ((val Logs.src_log log_src : Logs.LOG))
+
   module Server = Cohttp_mirage.Server(Conduit_mirage.Flow)
   module PServer = Prometheus_app.Cohttp(Cohttp_mirage.Server_with_conduit)
 

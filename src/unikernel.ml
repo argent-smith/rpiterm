@@ -1,4 +1,7 @@
 module Operations (Time : Mirage_time_lwt.S) (CON : Conduit_mirage.S) = struct
+  let log_src = Logs.Src.create "operations" ~doc:"Toplevel operations"
+  module Log = Logger.Instance ((val Logs.src_log log_src : Logs.LOG))
+
   let report_bootup () = Log.info (fun f -> f "Booting up")
 
   let get_http_port = Key_gen.listen_prometheus

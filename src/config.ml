@@ -7,6 +7,8 @@ let packages = [
     package "cohttp-mirage"
   ]
 
+let stage = `Run
+
 let thermometer_file =
   let doc = Key.Arg.info
               ~doc:"Optional file containing the system thermometer data."
@@ -14,7 +16,7 @@ let thermometer_file =
               ~docv:"STRING"
               ["thermometer-file"]
   in
-  Key.(create "thermometer-file" Arg.(opt string "/sys/class/thermal/thermal_zone0/temp" doc))
+  Key.(create "thermometer-file" Arg.(opt ~stage string "/sys/class/thermal/thermal_zone0/temp" doc))
 
 let listen_prometheus =
   let doc = Key.Arg.info
@@ -23,7 +25,7 @@ let listen_prometheus =
               ~docv:"PORT"
               ["listen-prometheus"]
   in
-  Key.(create "listen-prometheus" Arg.(opt int 9100 doc))
+  Key.(create "listen-prometheus" Arg.(opt ~stage int 9100 doc))
 
 let keys = Key.([
                    abstract thermometer_file;

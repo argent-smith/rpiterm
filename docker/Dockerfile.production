@@ -1,29 +1,16 @@
 # -*- mode: dockerfile; -*-
-FROM argentoff/opam:arm32v7-ocaml-4.05.0-flambda as builder
-RUN opam pin add uri 1.9.2
-RUN opam pin add prometheus --dev
-RUN opam pin add prometheus-app --dev
-RUN opam install \
-         depext \
-         lwt \
-         mirage
+FROM argentoff/opam:arm64v8-ocaml-4.03.0-flambda as builder
+RUN opam install mirage \
+                 prometheus \
+                 prometheus-app
 RUN mkdir -p /home/dev/project
 WORKDIR /home/dev/project
 COPY --chown=dev src .
 RUN sh -lc "mirage configure -t unix --net socket \
-            && make depend \
-            && make"
+            && make depend"
+RUN sh -lc "env OCAMLPARAM='_,ccopts=-static' make"
 
-# FROM arm32v7/busybox:1.27.2
-# LABEL maintainer="Pavel Argentov (argentoff@gmail.com)"
-# RUN addgroup -S prometheus \
-#     && adduser \
-#        -S \
-#        -D \
-#        -H \
-#        -G prometheus \
-#        prometheus
-# COPY --from=builder /lib/arm-linux-gnueabihf /lib/
-# COPY --from=builder /home/dev/.opam/4.05.0+flambda/bin/rpiterm /bin
-# USER prometheus
-# ENTRYPOINT ["/bin/rpiterm"]
+FROM scratch
+LABEL maintainer="Pavel Argentov (argentoff@gmail.com)"
+COPY --from=builder /home/dev/project/_build/main.native /rpiterm
+ENTRYPOINT ["/rpiterm"]

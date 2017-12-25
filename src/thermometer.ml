@@ -1,5 +1,4 @@
 open Lwt
-open Lwt.Infix
 
 module Interface = struct
   module type S = sig
@@ -17,24 +16,10 @@ module Mockup : Interface.S = struct
     return 36.6
 end
 
-module Linux : Interface.S = struct
-  let section = Lwt_log.Section.make "linux system thermometer"
-
-  (* Returns chipset temperature in Celsius as a float *)
-  let read_temperature ?(thermometer_file = "/dev/zero") () =
-    let open Lwt_io in
-    let read_float channel =
-      let%lwt str = read_line channel in
-      return @@ (float_of_string str) /. 1000.0
-    in
-    try%lwt
-      with_file ~mode:input thermometer_file read_float
-    with
-    | Unix.(Unix_error(ENOENT, _, fname)) ->
-       Lwt_log.fatal_f ~section "Could not open file %s" fname >> fail_with "exiting..."
-end
-
 module Mirage : Interface.S = struct
+  let log_src = Logs.Src.create "thermometer" ~doc:"Thermometer operations"
+  module Log = Logger.Instance ((val Logs.src_log log_src : Logs.LOG))
+
   (* Returns chipset temperature in Celsius as a float *)
   let read_temperature ?(thermometer_file = "/dev/zero") () =
     let open Lwt_io in
@@ -42,9 +27,10 @@ module Mirage : Interface.S = struct
       let%lwt str = read_line channel in
       return @@ (float_of_string str) /. 1000.0
     in
+    let open Unix in
     try%lwt
       with_file ~mode:input thermometer_file read_float
     with
-    | Unix.(Unix_error(ENOENT, _, fname)) ->
+    | Unix_error(ENOENT, _, fname) ->
        Log.err (fun f -> f "Could not open file %s" fname) >> return 0.0
 end
