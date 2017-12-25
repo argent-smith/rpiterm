@@ -27,11 +27,15 @@ You can choose the system's thermometer file via the coresponding cli key as des
     Optional file containing the system thermometer data.
 ```
 
-### Docker image for arm32v7
+### Mirage version note
+
+In MirageOS, the embedded logger logs to STDOUT. It's normal. Just grin and bear it.
+
+### Docker images
 [argentoff/rpiterm](https://hub.docker.com/r/argentoff/rpiterm/)
 
 ## License
-Simplified BSD
+MIT
 
 ## Author
 Pavel Argentov (argentoff@gmail.com)
