@@ -1,7 +1,7 @@
 # -*- mode: dockerfile; -*-
 FROM argentoff/opam:arm64v8-ocaml-4.06.0-flambda-p1 as build-app
-RUN opam update
-RUN opam upgrade
+RUN opam update && \
+    opam upgrade
 RUN mkdir -p /home/dev/project
 WORKDIR /home/dev/project
 COPY --chown=dev . .
