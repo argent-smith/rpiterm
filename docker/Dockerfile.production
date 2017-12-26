@@ -1,14 +1,17 @@
 # -*- mode: dockerfile; -*-
-FROM argentoff/opam:arm64v8-ocaml-4.06.0-flambda as builder
-RUN opam install prometheus prometheus-app
+FROM argentoff/opam:arm64v8-ocaml-4.06.0-flambda as build-app
+RUN opam update
+RUN opam upgrade
 RUN mkdir -p /home/dev/project
 WORKDIR /home/dev/project
 COPY --chown=dev . .
 RUN mv -f src/bin/jbuild.static src/bin/jbuild
-RUN sh -lc "jbuilder build @install && jbuilder install"
+RUN sh -lc "opam pin add rpiterm . -n && \
+            opam install rpiterm --deps-only && \
+            jbuilder build @install && \
+            jbuilder install"
 
-FROM arm64v8/busybox:1.27.2
-LABEL maintainer="Pavel Argentov (argentoff@gmail.com)"
+FROM arm64v8/busybox:1.27.2 as build-users
 RUN addgroup -S prometheus \
     && adduser \
        -S \
@@ -16,6 +19,11 @@ RUN addgroup -S prometheus \
        -H \
        -G prometheus \
        prometheus
-COPY --from=builder /home/dev/.opam/4.06.0+flambda/bin/rpiterm /bin
+
+FROM scratch
+LABEL maintainer="Pavel Argentov (argentoff@gmail.com)"
+COPY --from=build-users /etc/group /etc/group
+COPY --from=build-users /etc/passwd /etc/passwd
+COPY --from=build-app /home/dev/.opam/4.06.0+flambda/bin/rpiterm /
 USER prometheus
-ENTRYPOINT ["/bin/rpiterm"]
+ENTRYPOINT ["/rpiterm"]
