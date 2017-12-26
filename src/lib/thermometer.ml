@@ -31,5 +31,6 @@ module Linux : Interface.S = struct
       with_file ~mode:input thermometer_file read_float
     with
     | Unix.(Unix_error(ENOENT, _, fname)) ->
-       Lwt_log.fatal_f ~section "Could not open file %s" fname >>= fun () -> fail_with "exiting..."
+       Lwt_log.fatal_f ~section "Could not open file %s" fname
+       >>= fun () -> fail_with "exiting..."
 end
