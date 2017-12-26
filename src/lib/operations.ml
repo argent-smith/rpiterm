@@ -6,7 +6,7 @@ let section = Lwt_log.Section.make "operations"
 let setup_logging () =
   let open Lwt_log in
   let template = "$(date).$(milliseconds) $(name)[$(pid)]: $(level)($(section)) => $(message)" in
-  default := broadcast [channel ~template ~close_mode:`Keep ~channel:Lwt_io.stderr ()];
+  default := broadcast [channel ~template ~close_mode:`Keep ~channel:Lwt_io.stdout ()];
   add_rule "*" Info
 
 let setup_signal_handling () =
