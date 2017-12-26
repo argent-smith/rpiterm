@@ -1,0 +1,12 @@
+;; -*- mode: lisp; -*-
+(jbuild_version 1)
+
+(library
+ ((name rpiterm_lib)
+  (wrapped false)
+  (libraries (prometheus
+              prometheus-app.unix))
+  (preprocess (pps (lwt.ppx -no-debug)))
+  (flags (-safe-string))
+  (ocamlopt_flags (-O2 -safe-string))
+ ))
