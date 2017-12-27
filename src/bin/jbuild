@@ -4,8 +4,8 @@
 (executable
  ((name rpiterm)
   (public_name rpiterm)
-  (libraries (rpiterm_lib
-              prometheus
+  (preprocess (pps (lwt.ppx)))
+  (libraries (prometheus
               prometheus-app.unix))
   (flags (-safe-string))
   (ocamlopt_flags (-O2 -safe-string))
