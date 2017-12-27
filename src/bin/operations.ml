@@ -15,7 +15,6 @@ let report_bootup () =
 let main thermometer_file prometheus_config =
   Logger.setup ();
   setup_signal_handling ();
-  let threads = report_bootup ()
-                :: Thermometry.run thermometer_file
+  let threads = (report_bootup () >>= fun () -> Thermometry.run thermometer_file)
                 :: Prometheus_unix.serve prometheus_config in
-  Lwt_main.run @@ join threads
+  Lwt_main.run @@ choose threads
