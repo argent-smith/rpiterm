@@ -18,7 +18,7 @@ module Mockup : Interface.S = struct
 end
 
 module Linux : Interface.S = struct
-  let section = Lwt_log.Section.make "linux system thermometer"
+  module Log = (val Logger.create "linux system thermometer" : Logger.LOG)
 
   (* Returns chipset temperature in Celsius as a float *)
   let read_temperature ?(thermometer_file = "/dev/zero") () =
@@ -31,6 +31,6 @@ module Linux : Interface.S = struct
       with_file ~mode:input thermometer_file read_float
     with
     | Unix.(Unix_error(ENOENT, _, fname)) ->
-       Lwt_log.fatal_f ~section "Could not open file %s" fname
+       Log.fatal "Could not open file %s" fname
        >>= fun () -> fail_with "exiting..."
 end

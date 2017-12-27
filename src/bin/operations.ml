@@ -1,26 +1,19 @@
 open Lwt
-open Lwt.Infix
 
-let section = Lwt_log.Section.make "operations"
-
-let setup_logging () =
-  let open Lwt_log in
-  let template = "$(date).$(milliseconds) $(name)[$(pid)]: $(level)($(section)) => $(message)" in
-  default := broadcast [channel ~template ~close_mode:`Keep ~channel:Lwt_io.stdout ()];
-  add_rule "*" Info
+module Log = (val Logger.create "operations" : Logger.LOG)
 
 let setup_signal_handling () =
   let _ = Lwt_unix.on_signal Sys.sigint @@
             fun _ ->
-            Lwt_log.info_f "Caught user interruption; exiting" |> ignore_result;
+            Log.info "Caught user interruption; exiting" |> ignore_result;
             exit 0
   in ()
 
 let report_bootup () =
-  Lwt_log.info_f ~section "Booting up"
+  Log.info "Booting up"
 
 let main thermometer_file prometheus_config =
-  setup_logging ();
+  Logger.setup ();
   setup_signal_handling ();
   let threads = report_bootup ()
                 :: Thermometry.run thermometer_file
