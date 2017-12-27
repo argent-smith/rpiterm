@@ -1,13 +1,14 @@
 opam-version: "1.2"
-version: "v0.0.4"
+name: "rpiterm"
+version: "v0.0.8"
 maintainer: "Pavel Argentov <argentoff@gmail.com>"
-authors: ["Pavel Argentov <argentoff@gmail.com>"]
+authors: "Pavel Argentov <argentoff@gmail.com>"
 license: "MIT"
+homepage: "https://github.com/argent-smith/rpiterm"
+dev-repo: "https://github.com/argent-smith/rpiterm"
+bug-reports: "https://github.com/argent-smith/rpiterm/issues"
 build: [
-  ["jbuilder" "build" "--only" "rpiterm" "--root" "." "-j" jobs "@install"]
+  "jbuilder" "build" "--only" "rpiterm" "--root" "." "-j" jobs "@install"
 ]
-depends: [
-  "prometheus"
-  "prometheus-app"
-]
-available: [ ocaml-version >= "4.04" ]
+depends: ["prometheus" "prometheus-app"]
+available: [ocaml-version >= "4.04"]
