@@ -4,7 +4,7 @@
 (executable
  ((name rpiterm)
   (public_name rpiterm)
-  (preprocess (pps (lwt.ppx)))
+  (preprocess (pps (lwt_ppx)))
   (libraries (prometheus
               prometheus-app.unix))
   (flags (-safe-string))

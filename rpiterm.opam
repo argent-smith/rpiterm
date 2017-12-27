@@ -10,5 +10,5 @@ bug-reports: "https://github.com/argent-smith/rpiterm/issues"
 build: [
   "jbuilder" "build" "--only" "rpiterm" "--root" "." "-j" jobs "@install"
 ]
-depends: ["prometheus" "prometheus-app"]
+depends: ["prometheus" "prometheus-app" "lwt_ppx" "lwt_log"]
 available: [ocaml-version >= "4.04"]
