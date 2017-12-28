@@ -8,7 +8,17 @@ homepage: "https://github.com/argent-smith/rpiterm"
 dev-repo: "https://github.com/argent-smith/rpiterm"
 bug-reports: "https://github.com/argent-smith/rpiterm/issues"
 build: [
-  "jbuilder" "build" "--only" "rpiterm" "--root" "." "-j" jobs "@install"
+  [ "jbuilder" "build" "--only" "rpiterm" "--root" "." "-j" jobs "@install" ]
 ]
-depends: ["prometheus" "prometheus-app" "lwt_ppx" "lwt_log"]
-available: [ocaml-version >= "4.04"]
+build-test: [
+  [ "jbuilder" "runtest" ]
+]
+depends: [
+  "jbuilder"
+  "prometheus"
+  "prometheus-app"
+  "lwt_ppx"
+  "lwt_log"
+  "alcotest" {test}
+]
+available: [ ocaml-version >= "4.04" ]

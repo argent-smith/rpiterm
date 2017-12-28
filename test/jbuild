@@ -1,0 +1,16 @@
+;;; -*- mode: lisp; -*-
+(jbuild_version 1)
+
+(executable
+ ((name test)
+  (libraries (alcotest rpiterm_lib))
+  (preprocess (pps (lwt_ppx)))))
+
+(rule
+ ((targets (tempfile))
+ (action (write-file tempfile 36600))))
+
+(alias
+ ((name runtest)
+  (deps (test.exe tempfile))
+  (action (run ${<} -e))))
