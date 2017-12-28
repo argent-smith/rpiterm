@@ -4,6 +4,8 @@
 (executable
  ((name test)
   (libraries (alcotest rpiterm_lib))
+  (flags (-safe-string))
+  (ocamlopt_flags (-O2 -safe-string))
   (preprocess (pps (lwt_ppx)))))
 
 (rule
