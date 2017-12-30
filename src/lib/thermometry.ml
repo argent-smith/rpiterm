@@ -11,7 +11,7 @@ let get_thermometer_value thermometer_file =
      Log.info "Got thermometer value as %.3f" number
      >>= fun () -> return number
   | Error exn ->
-     Log.fatal "Failed getting thermometer value"
+     Log.fatal ~exn "Failed getting thermometer value"
      >>= fun () -> fail exn
 
 let rec run thermometer_file =
