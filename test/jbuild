@@ -3,7 +3,9 @@
 
 (executable
  ((name test)
-  (libraries (alcotest rpiterm_lib))
+  (libraries (alcotest
+              alcotest-lwt
+              rpiterm_lib))
   (flags (-safe-string))
   (ocamlopt_flags (-O2 -safe-string))
   (preprocess (pps (lwt_ppx)))))
@@ -15,4 +17,4 @@
 (alias
  ((name runtest)
   (deps (test.exe tempfile))
-  (action (run ${<} -e))))
+  (action (run ${<} -e --color=always))))

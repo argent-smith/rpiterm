@@ -20,5 +20,6 @@ depends: [
   "lwt_ppx"
   "lwt_log"
   "alcotest" {test}
+  "alcotest-lwt" {test}
 ]
 available: [ ocaml-version >= "4.04" ]

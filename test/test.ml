@@ -1,142 +1,117 @@
-open Lwt
-open Lwt.Infix
+open Test_utils
 
-(* Tests per se *)
 module Thermometer_tests = struct
-  let collect_float_result = function
-    | Ok number -> number
-    | Error exn -> raise exn
-
   module Mockup_thermometer_tests = struct
-    let value_reading () =
-      let test =
-        Thermometer.Mockup.read_temperature ()
-        >|= collect_float_result
-        >|= Alcotest.(check (float 0.0)) "'reads' body temperature" 36.6
-      in
-      Lwt_main.run test
+    let value_reading =
+      let description = "Value reading"
+      and checker = Alcotest.(check (float 0.0)) "read_temperature \"reads\" body temperature" 36.6
+      and promise = Thermometer.Mockup.read_temperature ()
+      and strategy = check_promise_result_value in
+      lwt_test_case ~description ~checker ~promise ~strategy
 
-    let file_ignoring () =
-      let test =
-        let thermometer_file = Some "name" in
-        Thermometer.Mockup.read_temperature ~thermometer_file ()
-        >|= collect_float_result
-        >|= Alcotest.(check (float 0.0)) "ignores optional file name" 36.6
-      in
-      Lwt_main.run test
+    let file_ignoring =
+      let description = "File ignoring" in
+      let thermometer_file = Some "name" in
+      let checker = Alcotest.(check (float 0.0)) "read_temperature ignores optional file name" 36.6
+      and promise = Thermometer.Mockup.read_temperature ~thermometer_file ()
+      and strategy = check_promise_result_value in
+      lwt_test_case ~description ~checker ~promise ~strategy
 
-    let noop_file_ignoring () =
-      let test =
-        let thermometer_file = None in
-        Thermometer.Mockup.read_temperature ~thermometer_file ()
-        >|= collect_float_result
-        >|= Alcotest.(check (float 0.0)) "ignores nonexistent file name" 36.6
-      in
-      Lwt_main.run test
+    let noop_file_ignoring =
+      let description = "Noop file ignoring" in
+      let thermometer_file = None in
+      let checker = Alcotest.(check (float 0.0)) "read_temperature ignores nonexistent file name" 36.6
+      and promise = Thermometer.Mockup.read_temperature ~thermometer_file ()
+      and strategy = check_promise_result_value in
+      lwt_test_case ~description ~checker ~promise ~strategy
   end
 
   module Linux_thermometer_tests = struct
-    let value_reading () =
-      let test =
-        let thermometer_file = Some "tempfile" in
-        Thermometer.Linux.read_temperature ~thermometer_file ()
-        >|= collect_float_result
-        >|= Alcotest.(check (float 0.0)) "reads body temperature from the file" 36.6
-      in
-      Lwt_main.run test
+    let value_reading =
+      let description = "Value reading" in
+      let thermometer_file = Some "tempfile" in
+      let checker = Alcotest.(check (float 0.0)) "read_temperature reads temperature from the file" 36.6
+      and promise = Thermometer.Mockup.read_temperature ~thermometer_file ()
+      and strategy = check_promise_result_value in
+      lwt_test_case ~description ~checker ~promise ~strategy
 
-    let file_opening_failure () =
+    let file_opening_failure =
+      let description = "File opening failure" in
       let filename = "non_existent_file" in
-      let test = fun () ->
-        let thermometer_file = Some filename in
-        let computation = fun () ->
-          let _ =
-            Lwt_main.run (Thermometer.Linux.read_temperature ~thermometer_file ()
-                          >|= collect_float_result) in
-          ()
-        in
-        let exn = Unix.Unix_error(Unix.ENOENT, "open", filename) in
-        Alcotest.check_raises "reports error" exn computation
-      in
-      test ()
+      let thermometer_file = Some filename in
+      let exn = Unix.Unix_error(Unix.ENOENT, "open", filename) in
+      let checker = Alcotest.check_raises "reports error" exn
+      and promise = Thermometer.Linux.read_temperature ~thermometer_file ()
+      and strategy = check_promise_result_failure in
+      lwt_test_case ~description ~checker ~promise ~strategy
 
-    let noop_file_failure () =
-      let test = fun () ->
-        let computation = fun () ->
-          let thermometer_file = None in
-          let _ =
-            Lwt_main.run (Thermometer.Linux.read_temperature ~thermometer_file ()
-                          >|= collect_float_result) in
-          ()
-        in
-        Alcotest.check_raises "reports error" Thermometer.No_thermometer_file computation
-      in
-      test ()
+    let noop_file_failure =
+      let description = "Noop file failure" in
+      let thermometer_file = None in
+      let checker = Alcotest.check_raises "reports error" Thermometer.No_thermometer_file
+      and promise = Thermometer.Linux.read_temperature ~thermometer_file ()
+      and strategy = check_promise_result_failure in
+      lwt_test_case ~description ~checker ~promise ~strategy
 
-    let nonspecified_file_failure () =
-      let test = fun () ->
-        let computation = fun () ->
-          let _ =
-            Lwt_main.run (Thermometer.Linux.read_temperature ()
-                          >|= collect_float_result) in
-          ()
-        in
-        Alcotest.check_raises "reports error" Thermometer.No_thermometer_file computation
-      in
-      test ()
+    let nonspecified_file_failure =
+      let description = "Nonspecified file failure" in
+      let checker = Alcotest.check_raises "reports error" Thermometer.No_thermometer_file
+      and promise = Thermometer.Linux.read_temperature ()
+      and strategy = check_promise_result_failure in
+      lwt_test_case ~description ~checker ~promise ~strategy
   end
 end
 
 module Thermometry_tests = struct
-  let value_getting () =
-    let test =
-      let filename = "tempfile" in
-      Thermometry.get_thermometer_value @@ Some filename
-      >|= Alcotest.(check (float 0.0)) "'reads' body temperature" 36.6
-    in
-    Lwt_main.run test
+  let value_getting =
+    let description = "Value getting" in
+    let thermometer_file = Some "tempfile" in
+    let checker = Alcotest.(check (float 0.0)) "get_thermometer_value reads temperature from the file" 36.6
+    and promise = Thermometry.get_thermometer_value thermometer_file
+    and strategy = check_promise_value in
+    lwt_test_case ~description ~checker ~promise ~strategy
 
-  let nofile_failure () =
-    let test = fun () ->
-      let computation = fun () ->
-        let _ =
-          Lwt_main.run @@ Thermometry.get_thermometer_value None in ()
-      in
-      Alcotest.check_raises "reports error" Thermometer.No_thermometer_file computation
-      in test ()
+  let nofile_failure =
+    let description = "Nofile failure" in
+    let thermometer_file = None
+    and exn = Thermometer.No_thermometer_file in
+    let checker = Alcotest.check_raises "get_thermometer_value reports error if noop file specified" exn
+    and promise = Thermometry.get_thermometer_value thermometer_file
+    and strategy = check_promise_exception in
+    lwt_test_case ~description ~checker ~promise ~strategy
 
-  let wrong_file_failure () =
+  let wrong_file_failure =
+    let description = "Wrong file failure" in
     let filename = "tempfile_wrong" in
-    let test = fun () ->
-      let computation = fun () ->
-        let _ =
-          Lwt_main.run @@ Thermometry.get_thermometer_value @@ Some filename in ()
-      in
-      let exn = Unix.Unix_error(Unix.ENOENT, "open", filename) in
-      Alcotest.check_raises "reports error" exn computation
-      in test ()
+    let thermometer_file = Some filename
+    and exn = Unix.Unix_error(Unix.ENOENT, "open", filename) in
+    let checker = Alcotest.check_raises "get_thermometer_value reports error if wrong file specified" exn
+    and promise = Thermometry.get_thermometer_value thermometer_file
+    and strategy = check_promise_exception in
+    lwt_test_case ~description ~checker ~promise ~strategy
 end
 
-let mockup_thermometer_tests = [
-    "Value reading", `Slow, Thermometer_tests.Mockup_thermometer_tests.value_reading;
-    "File ignoring", `Slow, Thermometer_tests.Mockup_thermometer_tests.file_ignoring;
-    "Noop file ignoring", `Slow, Thermometer_tests.Mockup_thermometer_tests.noop_file_ignoring
-  ]
+let mockup_thermometer_tests = Thermometer_tests.Mockup_thermometer_tests.
+                               [
+                                 value_reading;
+                                 file_ignoring;
+                                 noop_file_ignoring
+                               ]
 
-let linux_thermometer_tests = [
-    "Value reading", `Slow, Thermometer_tests.Linux_thermometer_tests.value_reading;
-    "File opening failure", `Slow, Thermometer_tests.Linux_thermometer_tests.file_opening_failure;
-    "Noop file failure", `Slow, Thermometer_tests.Linux_thermometer_tests.noop_file_failure;
-    "Nonspecified file failure", `Slow, Thermometer_tests.Linux_thermometer_tests.nonspecified_file_failure
-  ]
+let linux_thermometer_tests = Thermometer_tests.Linux_thermometer_tests.
+                              [
+                                value_reading;
+                                file_opening_failure;
+                                noop_file_failure;
+                                nonspecified_file_failure
+                              ]
 
-let thermometry_tests = [
-    "Value getting", `Slow, Thermometry_tests.value_getting;
-    "Nofile failure", `Slow, Thermometry_tests.nofile_failure;
-    "Wrong file failure", `Slow, Thermometry_tests.wrong_file_failure
-  ]
+let thermometry_tests = Thermometry_tests.
+                        [
+                          value_getting;
+                          nofile_failure
+                        ]
 
-(* Run it *)
 let () =
   Alcotest.run "Thermometers" [
     "Mockup thermometer", mockup_thermometer_tests;
