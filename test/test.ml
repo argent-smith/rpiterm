@@ -109,7 +109,8 @@ let linux_thermometer_tests = Thermometer_tests.Linux_thermometer_tests.
 let thermometry_tests = Thermometry_tests.
                         [
                           value_getting;
-                          nofile_failure
+                          nofile_failure;
+                          wrong_file_failure
                         ]
 
 let () =
