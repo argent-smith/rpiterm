@@ -15,10 +15,12 @@ build-test: [
 ]
 depends: [
   "jbuilder"
+  "lwt"
+  "lwt_ppx"
+  "fmt"
+  "logs"
   "prometheus"
   "prometheus-app"
-  "lwt_ppx"
-  "lwt_log"
   "alcotest" {test}
   "alcotest-lwt" {test}
 ]

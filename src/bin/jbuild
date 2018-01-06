@@ -6,7 +6,6 @@
   (public_name rpiterm)
   (preprocess (pps (lwt_ppx)))
   (libraries (rpiterm_lib
-              prometheus
               prometheus-app.unix))
   (flags (-safe-string))
   (ocamlopt_flags (-O2 -safe-string))))
