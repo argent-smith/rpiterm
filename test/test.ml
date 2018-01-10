@@ -91,27 +91,30 @@ module Thermometry_tests = struct
     lwt_test_case ~description ~checker ~promise ~strategy
 end
 
-let mockup_thermometer_tests = Thermometer_tests.Mockup_thermometer_tests.
-                               [
-                                 value_reading;
-                                 file_ignoring;
-                                 noop_file_ignoring
-                               ]
+let mockup_thermometer_tests =
+  Thermometer_tests.Mockup_thermometer_tests.
+  [
+    value_reading;
+    file_ignoring;
+    noop_file_ignoring
+  ]
 
-let linux_thermometer_tests = Thermometer_tests.Linux_thermometer_tests.
-                              [
-                                value_reading;
-                                file_opening_failure;
-                                noop_file_failure;
-                                nonspecified_file_failure
-                              ]
+let linux_thermometer_tests =
+  Thermometer_tests.Linux_thermometer_tests.
+  [
+    value_reading;
+    file_opening_failure;
+    noop_file_failure;
+    nonspecified_file_failure
+  ]
 
-let thermometry_tests = Thermometry_tests.
-                        [
-                          value_getting;
-                          nofile_failure;
-                          wrong_file_failure
-                        ]
+let thermometry_tests =
+  Thermometry_tests.
+  [
+    value_getting;
+    nofile_failure;
+    wrong_file_failure
+  ]
 
 let () =
   Alcotest.run "Thermometers" [
