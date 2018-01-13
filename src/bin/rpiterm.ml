@@ -12,7 +12,7 @@ let thermometer_file =
   and env = Arg.env_var "THERMOMETER_FILE" in
   Arg.(value & opt string default & info ["f"; "thermometer-file"] ~env ~doc)
 
-let operation = Term.(const Operations.main $ thermometer_file $ Prometheus_unix.opts)
+let operation = Term.(const Operations.main $ thermometer_file $ Prometheus_unix.opts $ Logger.opts ())
 
 let () =
   match Term.eval (operation, info) with

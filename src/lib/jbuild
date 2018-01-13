@@ -4,7 +4,8 @@
 (library
  ((name rpiterm_lib)
   (wrapped false)
-  (libraries (ptime
+  (libraries (cmdliner
+              ptime
               ptime.clock.os
               fmt
               fmt.tty

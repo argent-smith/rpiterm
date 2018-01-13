@@ -20,6 +20,7 @@ depends: [
   "fmt"
   "ptime"
   "logs"
+  "cmdliner"
   "prometheus"
   "prometheus-app"
   "alcotest" {test}
