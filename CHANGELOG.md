@@ -8,3 +8,5 @@
 * v0.1.0 - Major code refactoring.
 
 * v0.1.2 - Fully custom logging based on Logs library.
+
+* v0.2.0 - Optional logging of timestamps and process info
