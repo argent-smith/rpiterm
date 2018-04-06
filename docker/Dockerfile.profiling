@@ -1,20 +1,15 @@
 # -*- mode: dockerfile; -*-
-FROM argentoff/ocaml-workbench:amd64-en
-LABEL maintainer="Pavel Argentov (argentoff@gmail.com)" \
-      "net.argentoff.dev.base"="rpiterm"
-RUN opam switch 4.05.0+spacetime
-RUN eval `opam config env`
-RUN opam update
-RUN opam upgrade -y
-RUN opam pin add uri 1.9.2
-RUN opam install prof_spacetime
-RUN opam install prometheus prometheus-app
-USER dev
-RUN echo "\neval `opam config env`" >> /home/dev/.bashrc
+FROM argentoff/opam:amd64-ocaml-4.05.0-spacetime
+LABEL maintainer="Pavel Argentov (argentoff@gmail.com)"
+RUN eval `opam config env` && \
+    opam update && \
+    opam upgrade -y && \
+    opam install prof_spacetime
 RUN mkdir -p /home/dev/project
 VOLUME /home/dev/project
 WORKDIR /home/dev/project
 COPY --chown=dev . .
-RUN bash -l -c "jbuilder build -j 4 @install && jbuilder install"
+RUN mv -f src/bin/jbuild.static src/bin/jbuild
+RUN sh -lc "opam pin add rpiterm ."
 RUN echo -n "36600" > fake_thermometer
 ENV OCAML_SPACETIME_INTERVAL=100
