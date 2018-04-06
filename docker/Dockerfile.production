@@ -1,5 +1,5 @@
 # -*- mode: dockerfile; -*-
-FROM argentoff/opam:arm64v8-ocaml-4.06.0-flambda-p1 as build-app
+FROM argentoff/opam:arm64v8-ocaml-4.06.1-flambda as build-app
 RUN opam update && \
     opam upgrade
 RUN mkdir -p /home/dev/project
@@ -21,6 +21,6 @@ FROM scratch
 LABEL maintainer="Pavel Argentov (argentoff@gmail.com)"
 COPY --from=build-users /etc/group /etc/group
 COPY --from=build-users /etc/passwd /etc/passwd
-COPY --from=build-app /home/dev/.opam/4.06.0+flambda/bin/rpiterm /
+COPY --from=build-app /home/dev/.opam/4.06.1+flambda/bin/rpiterm /
 USER prometheus
 ENTRYPOINT ["/rpiterm"]
