@@ -1,4 +1,5 @@
-;; -*- mode: lisp; -*-
+;; -*- tuareg-dune -*-
+
 (jbuild_version 1)
 
 (executable

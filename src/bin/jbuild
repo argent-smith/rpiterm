@@ -1,4 +1,3 @@
-;; -*- mode: lisp; -*-
 (jbuild_version 1)
 
 (executable
