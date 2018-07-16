@@ -5,7 +5,7 @@ RUN opam update && \
 RUN mkdir -p /home/dev/project
 WORKDIR /home/dev/project
 COPY --chown=dev . .
-RUN mv -f src/bin/jbuild.static src/bin/jbuild
+RUN mv -f src/bin/dune.static src/bin/dune
 RUN sh -lc "opam pin add rpiterm ."
 
 FROM arm64v8/busybox:1.27.2 as build-users

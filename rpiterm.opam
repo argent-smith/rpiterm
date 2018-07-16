@@ -8,13 +8,13 @@ homepage: "https://github.com/argent-smith/rpiterm"
 dev-repo: "https://github.com/argent-smith/rpiterm"
 bug-reports: "https://github.com/argent-smith/rpiterm/issues"
 build: [
-  [ "jbuilder" "build" "--only" "rpiterm" "--root" "." "-j" jobs "@install" ]
+  [ "dune" "build" "--only" "rpiterm" "--root" "." "-j" jobs "@install" ]
 ]
 build-test: [
-  [ "jbuilder" "runtest" ]
+  [ "dune" "runtest" ]
 ]
 depends: [
-  "jbuilder"
+  "dune"
   "lwt"
   "lwt_ppx"
   "fmt"

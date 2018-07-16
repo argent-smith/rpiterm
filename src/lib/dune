@@ -1,0 +1,18 @@
+;; -*- tuareg-dune -*-
+
+(library
+ (name rpiterm_lib)
+ (wrapped false)
+ (libraries cmdliner
+            ptime
+            ptime.clock.os
+            fmt
+            fmt.tty
+            logs
+            logs.fmt
+            logs.lwt
+            prometheus
+            prometheus-app.unix)
+ (preprocess (pps lwt_ppx))
+ (flags (-safe-string))
+ (ocamlopt_flags (-O2 -safe-string)))

@@ -16,4 +16,4 @@ RUN mkdir -p /home/dev/project
 VOLUME /home/dev/project
 WORKDIR /home/dev/project
 COPY --chown=dev . .
-RUN bash -l -c "jbuilder build -j 4 @install && jbuilder install"
+RUN bash -l -c "dune build -j 4 @install && dune install"
