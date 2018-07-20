@@ -1,5 +1,5 @@
-# -*- mode: dockerfile; -*-
-FROM argentoff/opam:amd64-ocaml-4.05.0-spacetime
+# -*- dockerfile -*-
+FROM argentoff/opam:amd64-ocaml-4.06.0-spacetime
 LABEL maintainer="Pavel Argentov (argentoff@gmail.com)"
 RUN eval `opam config env` && \
     opam update && \
@@ -13,3 +13,6 @@ RUN mv -f src/bin/dune.static src/bin/dune
 RUN sh -lc "opam pin add rpiterm ."
 RUN echo -n "36600" > fake_thermometer
 ENV OCAML_SPACETIME_INTERVAL=100
+
+ENTRYPOINT [ "opam", "config", "exec", "--" ]
+CMD ["sh", "-lc", "rpiterm", "-f", "fake_thermometer"]
