@@ -1,19 +1,27 @@
-# -*- mode: dockerfile; -*-
-FROM argentoff/ocaml-workbench:arm32v7-en-0.0.3
+# -*- dockerfile -*-
+FROM argentoff/ocaml-workbench:arm64v8-en
 LABEL maintainer="Pavel Argentov (argentoff@gmail.com)" \
       "net.argentoff.dev.base"="rpiterm"
-RUN opam switch 4.05.0+flambda
-RUN eval `opam config env`
 RUN opam update
 RUN opam upgrade -y
-RUN opam pin add core_kernel "https://github.com/argent-smith/core_kernel.git#v0.9.1-ag"
-RUN opam install core utop
-RUN opam pin add uri 1.9.2
-RUN opam install prometheus prometheus-app
+RUN opam switch 4.07.0+flambda
 RUN echo "\neval `opam config env`" >> /home/dev/.bashrc
 USER dev
 RUN mkdir -p /home/dev/project
 VOLUME /home/dev/project
 WORKDIR /home/dev/project
 COPY --chown=dev . .
-RUN bash -l -c "jbuilder build -j 4 @install && jbuilder install"
+RUN bash -l -c "opam install depext"
+RUN bash -l -c "opam install utop"
+RUN bash -l -c "opam install merlin"
+
+# separate compilation prevents crashing of the latter
+# `opam install rpiterm...`
+RUN bash -l -c "opam install cohttp"
+
+RUN bash -l -c "opam pin add rpiterm . -n"
+RUN bash -l -c "opam install rpiterm -t --deps-only"
+RUN bash -l -c "dune build -j 4 @install && dune install"
+
+ENTRYPOINT [ "opam", "config", "exec", "--" ]
+CMD [ "bash" ]
