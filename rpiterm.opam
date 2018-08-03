@@ -1,19 +1,21 @@
-opam-version: "1.2"
+opam-version: "2.0"
 name: "rpiterm"
-version: "v0.2.3"
+version: "v0.2.4"
 maintainer: "Pavel Argentov <argentoff@gmail.com>"
 authors: "Pavel Argentov <argentoff@gmail.com>"
 license: "MIT"
 homepage: "https://github.com/argent-smith/rpiterm"
-dev-repo: "https://github.com/argent-smith/rpiterm"
+dev-repo: "git+https://github.com/argent-smith/rpiterm"
 bug-reports: "https://github.com/argent-smith/rpiterm/issues"
 build: [
+  [ "dune" "subst" ] { pinned }
   [ "dune" "build" "--only" "rpiterm" "--root" "." "-j" jobs "@install" ]
 ]
-build-test: [
+run-test: [
   [ "dune" "runtest" ]
 ]
 depends: [
+  "ocaml" { >= "4.04" }
   "dune"
   "lwt"
   "lwt_ppx"
@@ -23,7 +25,6 @@ depends: [
   "cmdliner"
   "prometheus"
   "prometheus-app"
-  "alcotest" {test}
-  "alcotest-lwt" {test}
+  "alcotest" { with-test }
+  "alcotest-lwt" { with-test }
 ]
-available: [ ocaml-version >= "4.04" ]
