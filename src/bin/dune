@@ -8,4 +8,8 @@
             rpiterm_lib
             prometheus-app.unix)
  (flags (-safe-string))
- (ocamlopt_flags (-O2 -safe-string)))
+ (ocamlopt_flags (:standard -O2 -safe-string)))
+
+(env
+ (static_build
+  (ocamlopt_flags (:standard -O2 -safe-string -ccopt -static))))

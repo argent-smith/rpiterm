@@ -8,8 +8,7 @@ homepage: "https://github.com/argent-smith/rpiterm"
 dev-repo: "git+https://github.com/argent-smith/rpiterm"
 bug-reports: "https://github.com/argent-smith/rpiterm/issues"
 build: [
-  [ "dune" "subst" ] { pinned }
-  [ "dune" "build" "--only" "rpiterm" "--root" "." "-j" jobs "@install" ]
+  [ "dune" "build" "-p" name "-j" jobs "@install" ]
 ]
 run-test: [
   [ "dune" "runtest" ]
