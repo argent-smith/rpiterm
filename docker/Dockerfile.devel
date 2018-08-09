@@ -1,27 +1,16 @@
 # -*- dockerfile -*-
-FROM argentoff/ocaml-workbench:arm64v8-en
+FROM argentoff/ocaml-workbench:0.0.6-arm64v8
 LABEL maintainer="Pavel Argentov (argentoff@gmail.com)" \
       "net.argentoff.dev.base"="rpiterm"
-RUN opam update
-RUN opam upgrade -y
-RUN opam switch 4.07.0+flambda
-RUN echo "\neval `opam config env`" >> /home/dev/.bashrc
 USER dev
 RUN mkdir -p /home/dev/project
 VOLUME /home/dev/project
 WORKDIR /home/dev/project
 COPY --chown=dev . .
-RUN bash -l -c "opam install depext"
-RUN bash -l -c "opam install utop"
-RUN bash -l -c "opam install merlin"
-
-# separate compilation prevents crashing of the latter
-# `opam install rpiterm...`
-RUN bash -l -c "opam install cohttp"
-
-RUN bash -l -c "opam pin add rpiterm . -n"
-RUN bash -l -c "opam install rpiterm -t --deps-only"
-RUN bash -l -c "dune build -j 4 @install && dune install"
+RUN opam switch create rpiterm 4.07.0+flambda -y && \
+    opam install -y utop && \
+    opam clean
+RUN opam install . --deps-only -t -y
 
 ENTRYPOINT [ "opam", "config", "exec", "--" ]
 CMD [ "bash" ]
