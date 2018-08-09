@@ -9,4 +9,6 @@
 
 * v0.1.2 - Fully custom logging based on Logs library.
 
-* v0.2.0 - Optional logging of timestamps and process info
+* v0.2.0 - Optional logging of timestamps and process info.
+
+* ... - v0.2.4 - Various build system improvements.
