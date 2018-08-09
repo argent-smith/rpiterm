@@ -15,7 +15,7 @@ run-test: [
 ]
 depends: [
   "ocaml" { >= "4.04" }
-  "dune"
+  "dune" { >= "1.1.1" }
   "lwt"
   "lwt_ppx"
   "fmt"
