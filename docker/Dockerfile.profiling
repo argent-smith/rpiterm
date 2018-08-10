@@ -1,16 +1,16 @@
 # -*- dockerfile -*-
-FROM argentoff/opam:amd64-ocaml-4.06.0-spacetime
-LABEL maintainer="Pavel Argentov (argentoff@gmail.com)"
-RUN eval `opam config env` && \
-    opam update && \
-    opam upgrade -y && \
-    opam install prof_spacetime
+FROM argentoff/opam:amd64_alpine-3.8_ocaml-4.06.0-spacetime_opam-2.0.0-rc4
+USER dev
 RUN mkdir -p /home/dev/project
 VOLUME /home/dev/project
 WORKDIR /home/dev/project
+ENV BUILD_STATIC_BINARY=true
 COPY --chown=dev . .
-RUN mv -f src/bin/dune.static src/bin/dune
-RUN sh -lc "opam pin add rpiterm ."
+RUN opam switch link 4.06.0+spacetime . && \
+    opam update && \
+    opam upgrade -y && \
+    opam install prof_spacetime -y && \
+    opam install . -y
 RUN echo -n "36600" > fake_thermometer
 ENV OCAML_SPACETIME_INTERVAL=100
 

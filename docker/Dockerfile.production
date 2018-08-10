@@ -4,7 +4,7 @@ RUN mkdir project
 WORKDIR /home/dev/project
 ENV BUILD_STATIC_BINARY=true
 COPY --chown=dev . .
-RUN opam switch link 4.07.0+flambda . &&\
+RUN opam switch link 4.07.0+flambda . && \
     opam update && opam upgrade && \
     opam install . -y
 
