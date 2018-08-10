@@ -1,6 +1,6 @@
 opam-version: "2.0"
 name: "rpiterm"
-version: "v0.2.5"
+version: "v0.2.6"
 maintainer: "Pavel Argentov <argentoff@gmail.com>"
 authors: "Pavel Argentov <argentoff@gmail.com>"
 license: "MIT"
@@ -9,7 +9,7 @@ dev-repo: "git+https://github.com/argent-smith/rpiterm"
 bug-reports: "https://github.com/argent-smith/rpiterm/issues"
 build: [
   [ "dune" "subst" ] { pinned }
-  [ "dune" "build" "-p" name "-j" jobs "@install" ]
+  [ "dune" "build" "-p" name "-j" jobs ]
 ]
 run-test: [
   [ "dune" "runtest" ]

@@ -8,6 +8,8 @@ VOLUME /home/dev/project
 WORKDIR /home/dev/project
 COPY --chown=dev . .
 RUN opam switch create rpiterm 4.07.0+flambda -y && \
+    opam update && \
+    opam upgrade && \
     opam install -y utop && \
     opam clean
 RUN opam install . --deps-only -t -y
