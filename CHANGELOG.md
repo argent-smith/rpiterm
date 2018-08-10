@@ -12,3 +12,6 @@
 * v0.2.0 - Optional logging of timestamps and process info.
 
 * ... - v0.2.4 - Various build system improvements.
+
+* v0.2.5 - Configurator added to the build pipeline; version info
+  added to the help page
