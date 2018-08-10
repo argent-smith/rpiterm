@@ -1,6 +1,6 @@
 opam-version: "2.0"
 name: "rpiterm"
-version: "v0.2.4"
+version: "v0.2.5"
 maintainer: "Pavel Argentov <argentoff@gmail.com>"
 authors: "Pavel Argentov <argentoff@gmail.com>"
 license: "MIT"
