@@ -1,0 +1,5 @@
+;; -*- tuareg-dune -*-
+
+(executable
+ (name discover)
+ (libraries dune.configurator))

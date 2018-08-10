@@ -1,10 +1,11 @@
 open Cmdliner
 
 let info =
-  let doc = "A simple Raspberry Pi system thermometer reporter for Prometheus. \
+  let version = "%%VERSION%%"
+  and doc = "A simple Raspberry Pi system thermometer reporter for Prometheus. \
              If run with the option --listen-prometheus=9090, \
              this program serves metrics at http://localhost:9090/metrics" in
-  Term.info "rpiterm" ~doc
+  Term.info "rpiterm" ~version ~doc
 
 let thermometer_file =
   let doc = "Optional file containing the system thermometer data."

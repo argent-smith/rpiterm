@@ -8,8 +8,9 @@
             rpiterm_lib
             prometheus-app.unix)
  (flags (-safe-string))
- (ocamlopt_flags (:standard -O2 -safe-string)))
+ (ocamlopt_flags (:standard (:include ocamlopt_flags.sexp))))
 
-(env
- (static_build
-  (ocamlopt_flags (:standard -O2 -safe-string -ccopt -static))))
+(rule
+ (targets ocamlopt_flags.sexp)
+ (deps (:discover config/discover.exe))
+ (action (run %{discover})))
