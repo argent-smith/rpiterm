@@ -9,7 +9,7 @@ dev-repo: "git+https://github.com/argent-smith/rpiterm"
 bug-reports: "https://github.com/argent-smith/rpiterm/issues"
 build: [
   [ "dune" "subst" ] { pinned }
-  [ "dune" "build" "-p" name "-j" jobs "@install" ]
+  [ "dune" "build" "-p" name "-j" jobs ]
 ]
 run-test: [
   [ "dune" "runtest" ]

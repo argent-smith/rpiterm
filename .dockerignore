@@ -1,4 +1,3 @@
 .dockerignore
-.git
 _opam
 _build

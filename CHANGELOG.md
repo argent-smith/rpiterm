@@ -15,3 +15,5 @@
 
 * v0.2.5 - Configurator added to the build pipeline; version info
   added to the help page
+
+* v0.2.6 - bugfixing v0.2.5 ;)

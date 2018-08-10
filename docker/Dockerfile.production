@@ -2,10 +2,11 @@
 FROM argentoff/opam:arm64v8_alpine-3.8_ocaml-4.07.0-flambda_opam-2.0.0-rc4 as build-app
 RUN mkdir project
 WORKDIR /home/dev/project
+ENV BUILD_STATIC_BINARY=true
 COPY --chown=dev . .
-RUN sh -lc "opam switch link 4.07.0+flambda ."
-RUN sh -lc "opam install . -y --deps-only"
-RUN sh -lc "dune build --profile=static_build @install && dune install"
+RUN opam switch link 4.07.0+flambda . &&\
+    opam update && opam upgrade && \
+    opam install . -y
 
 FROM arm64v8/busybox:1.29.2 as build-users
 RUN addgroup -S prometheus \
