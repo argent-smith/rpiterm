@@ -2,7 +2,7 @@ open Lwt
 open Lwt.Infix
 
 let source = Logs.Src.create "thermometry" ~doc:"Thermometry loop"
-module Log = (val Logger.create ~source : Logger.LOG)
+module Log = (val Ag_logger.create ~source : Ag_logger.LOG)
 
 let get_thermometer_value thermometer_file =
   let module T = Thermometer.Linux in

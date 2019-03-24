@@ -1,5 +1,7 @@
 opam-version: "2.0"
 name: "rpiterm"
+synopsis: "Raspberry Pi SoC thermometer tool"
+description: "Raspberry Pi SoC thermometer tool"
 version: "v0.2.6"
 maintainer: "Pavel Argentov <argentoff@gmail.com>"
 authors: "Pavel Argentov <argentoff@gmail.com>"
@@ -15,16 +17,18 @@ run-test: [
   [ "dune" "runtest" ]
 ]
 depends: [
-  "ocaml" { >= "4.04" }
-  "dune" { >= "1.1.1" }
-  "lwt"
-  "lwt_ppx"
-  "fmt"
-  "ptime"
-  "logs"
-  "cmdliner"
-  "prometheus"
-  "prometheus-app"
+  "ocaml" { build & >= "4.04" }
+  "dune" { build & >= "1.1.1" }
+  "lwt" { build }
+  "lwt_ppx" { build }
+  "cmdliner" { build }
+  "prometheus" { build }
+  "prometheus-app" { build }
   "alcotest" { with-test }
   "alcotest-lwt" { with-test }
+  "ag_logger" { build & = "0.0.1" }
+  "merlin" { post }
+]
+pin-depends: [
+  [ "ag_logger.0.0.1" "git+https://github.com/argent-smith/ag_logger.git" ]
 ]
