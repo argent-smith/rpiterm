@@ -1,15 +1,17 @@
 # -*- dockerfile -*-
-FROM argentoff/opam:amd64_alpine-3.8_ocaml-4.06.0-spacetime_opam-2.0.0-rc4
+
+# FIXME: doesn't build due to prof_spacetime being too ancient
+
+FROM argentoff/opam:x86_64_alpine-3.9_ocaml-4.07.1-spacetime_opam-2.0.3
 USER dev
 RUN mkdir -p /home/dev/project
 VOLUME /home/dev/project
 WORKDIR /home/dev/project
 ENV BUILD_STATIC_BINARY=true
 COPY --chown=dev . .
-RUN opam switch link 4.06.0+spacetime . && \
-    opam update && \
+RUN opam update && \
     opam upgrade -y && \
-    opam install prof_spacetime -y && \
+    opam install prof_spacetime -y --unlock-base && \
     opam install . -y
 RUN echo -n "36600" > fake_thermometer
 ENV OCAML_SPACETIME_INTERVAL=100

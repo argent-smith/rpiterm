@@ -1,14 +1,12 @@
 # -*- dockerfile -*-
-FROM argentoff/ocaml-workbench:0.0.6-arm64v8
-LABEL maintainer="Pavel Argentov (argentoff@gmail.com)" \
-      "net.argentoff.dev.base"="rpiterm"
+FROM argentoff/ocaml-workbench:arm64v8-0.0.7
+LABEL maintainer="Pavel Argentov (argentoff@gmail.com)"
 USER dev
 RUN mkdir -p /home/dev/project
 VOLUME /home/dev/project
 WORKDIR /home/dev/project
 COPY --chown=dev . .
-RUN opam switch create rpiterm 4.07.0+flambda -y && \
-    opam update && \
+RUN opam update && \
     opam upgrade && \
     opam install -y utop && \
     opam clean

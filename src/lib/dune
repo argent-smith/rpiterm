@@ -3,14 +3,10 @@
 (library
  (name rpiterm_lib)
  (wrapped false)
- (libraries cmdliner
-            ptime
-            ptime.clock.os
-            fmt
-            fmt.tty
-            logs
-            logs.fmt
-            logs.lwt
+ (libraries ag_logger
+            lwt
+            lwt.unix
+            cmdliner
             prometheus
             prometheus-app.unix)
  (preprocess (pps lwt_ppx))
