@@ -17,3 +17,5 @@
   added to the help page
 
 * v0.2.6 - bugfixing v0.2.5 ;)
+
+* v0.2.7 - Interfacing with (now external) logging library
