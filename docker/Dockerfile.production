@@ -1,14 +1,14 @@
 # -*- dockerfile -*-
-FROM argentoff/opam:arm64v8_alpine-3.8_ocaml-4.07.0-flambda_opam-2.0.0-rc4 as build-app
+FROM argentoff/opam:arm64v8_alpine-3.9_ocaml-4.07.1_opam-2.0.3 as build-app
 RUN mkdir project
 WORKDIR /home/dev/project
 ENV BUILD_STATIC_BINARY=true
 COPY --chown=dev . .
-RUN opam switch link 4.07.0+flambda . && \
+RUN opam switch link 4.07.1 . && \
     opam update && opam upgrade && \
     opam install . -y
 
-FROM arm64v8/busybox:1.29.2 as build-users
+FROM arm64v8/busybox:1.30.1 as build-users
 RUN addgroup -S prometheus \
     && adduser \
        -S \
