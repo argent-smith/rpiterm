@@ -1,6 +1,8 @@
 open Lwt
 open Lwt.Infix
 
+let tested_exn = Alcotest.testable Fmt.exn (=)
+
 let check_promise_value checker promise switch () =
   let open Lwt_switch in
   with_switch
@@ -8,22 +10,17 @@ let check_promise_value checker promise switch () =
       add_hook (Some switch)
                (fun () ->
                  promise >|= checker
-                 |> ignore_result |> return)
+                 |> ignore_result
+                 |> return)
       |> return)
 
-let check_promise_exception checker promise switch () =
-  let computation () =
-    let open Lwt_switch in
-    with_switch
-      (fun switch ->
-        add_hook (Some switch)
-                 (fun () ->
-                   promise
-                   |> ignore_result |> return)
-        |> return)
-    |> ignore_result
-  in
-  checker computation |> return
+let check_promise_exception checker promise _switch () =
+  Lwt.catch
+    (fun () -> promise >|= fun _ -> `Ok)
+    (fun e -> Lwt.return @@ `Error e)
+  >|= function
+  | `Ok -> Alcotest.fail "No exception was thrown"
+  | `Error e -> checker e
 
 let collect_result = function
   | Ok value -> value

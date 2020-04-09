@@ -40,7 +40,7 @@ module Thermometer_tests = struct
       let filename = "non_existent_file" in
       let thermometer_file = Some filename in
       let exn = Unix.Unix_error(Unix.ENOENT, "open", filename) in
-      let checker = Alcotest.check_raises "reports error" exn
+      let checker = Alcotest.(check tested_exn) "reports error" exn
       and promise = Thermometer.Linux.read_temperature ~thermometer_file ()
       and strategy = check_promise_result_failure in
       lwt_test_case ~description ~checker ~promise ~strategy
@@ -48,14 +48,14 @@ module Thermometer_tests = struct
     let noop_file_failure =
       let description = "Noop file failure" in
       let thermometer_file = None in
-      let checker = Alcotest.check_raises "reports error" Thermometer.No_thermometer_file
+      let checker = Alcotest.(check tested_exn) "reports error" Thermometer.No_thermometer_file
       and promise = Thermometer.Linux.read_temperature ~thermometer_file ()
       and strategy = check_promise_result_failure in
       lwt_test_case ~description ~checker ~promise ~strategy
 
     let nonspecified_file_failure =
       let description = "Nonspecified file failure" in
-      let checker = Alcotest.check_raises "reports error" Thermometer.No_thermometer_file
+      let checker = Alcotest.(check tested_exn) "reports error" Thermometer.No_thermometer_file
       and promise = Thermometer.Linux.read_temperature ()
       and strategy = check_promise_result_failure in
       lwt_test_case ~description ~checker ~promise ~strategy
@@ -75,7 +75,7 @@ module Thermometry_tests = struct
     let description = "Nofile failure" in
     let thermometer_file = None
     and exn = Thermometer.No_thermometer_file in
-    let checker = Alcotest.check_raises "get_thermometer_value reports error if noop file specified" exn
+    let checker = Alcotest.(check tested_exn) "get_thermometer_value reports error if noop file specified" exn
     and promise = Thermometry.get_thermometer_value thermometer_file
     and strategy = check_promise_exception in
     lwt_test_case ~description ~checker ~promise ~strategy
@@ -85,7 +85,7 @@ module Thermometry_tests = struct
     let filename = "tempfile_wrong" in
     let thermometer_file = Some filename
     and exn = Unix.Unix_error(Unix.ENOENT, "open", filename) in
-    let checker = Alcotest.check_raises "get_thermometer_value reports error if wrong file specified" exn
+    let checker = Alcotest.(check tested_exn) "get_thermometer_value reports error if wrong file specified" exn
     and promise = Thermometry.get_thermometer_value thermometer_file
     and strategy = check_promise_exception in
     lwt_test_case ~description ~checker ~promise ~strategy
@@ -117,8 +117,9 @@ let thermometry_tests =
   ]
 
 let () =
-  Alcotest.run "Thermometers" [
-    "Mockup thermometer", mockup_thermometer_tests;
-    "Linux thermometer", linux_thermometer_tests;
-    "Thermometry dispatcher", thermometry_tests
-  ]
+  Lwt_main.run @@
+    Alcotest_lwt.run "Thermometers" [
+        "Mockup thermometer", mockup_thermometer_tests;
+        "Linux thermometer", linux_thermometer_tests;
+        "Thermometry dispatcher", thermometry_tests
+      ]
