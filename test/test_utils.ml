@@ -5,19 +5,19 @@ let tested_exn = Alcotest.testable Fmt.exn (=)
 
 let check_promise_value checker promise switch () =
   let open Lwt_switch in
-  with_switch
-    (fun switch ->
+  with_switch(
+      fun switch ->
       add_hook (Some switch)
                (fun () ->
                  promise >|= checker
                  |> ignore_result
                  |> return)
-      |> return)
+      |> return
+    )
 
 let check_promise_exception checker promise _switch () =
-  Lwt.catch
-    (fun () -> promise >|= fun _ -> `Ok)
-    (fun e -> Lwt.return @@ `Error e)
+  (try%lwt promise >|= fun _ -> `Ok
+    with exn -> Lwt.return @@ `Error exn)
   >|= function
   | `Ok -> Alcotest.fail "No exception was thrown"
   | `Error e -> checker e
