@@ -1,5 +1,6 @@
 # -*- dockerfile -*-
-FROM argentoff/ocaml-workbench:arm64v8-0.0.7
+FROM opam-work
+#FROM argentoff/ocaml-workbench:arm64v8-0.0.7
 LABEL maintainer="Pavel Argentov (argentoff@gmail.com)"
 USER dev
 RUN mkdir -p /home/dev/project
