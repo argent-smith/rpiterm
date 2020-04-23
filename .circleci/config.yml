@@ -1,0 +1,10 @@
+---
+version: 2.1
+
+orbs:
+  opam: argent-smith/opam@dev:second
+
+workflows:
+  test:
+    jobs:
+      - opam/run_tests
