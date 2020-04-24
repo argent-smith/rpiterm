@@ -7,4 +7,12 @@ orbs:
 workflows:
   test:
     jobs:
-      - opam/run_tests
+      - opam/run_tests:
+          executor:
+            name: opam/opam_workbench
+            opam_image_tag: debian-10-ocaml-4.09
+      - opam/build_package:
+          executor:
+            name: opam/opam_workbench
+            opam_image_tag: debian-10-ocaml-4.09
+######
