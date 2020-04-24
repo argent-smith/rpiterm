@@ -1,4 +1,4 @@
-[![argent-smith](https://circleci.com/gh/argent-smith/rpiterm.svg?style=svg)](https://circleci.com/gh/argent-smith/rpiterm)
+[![argent-smith](https://circleci.com/gh/argent-smith/rpiterm.svg?style=shield)](https://circleci.com/gh/argent-smith/rpiterm)
 
 ## What?
 Simple temperature Prometheus reporter for Raspberry Pi.
