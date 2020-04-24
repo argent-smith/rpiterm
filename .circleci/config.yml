@@ -11,8 +11,10 @@ workflows:
           executor:
             name: opam/opam_workbench
             opam_image_tag: debian-10-ocaml-4.09
+          depext_pkgs: conf-m4
       - opam/build_package:
           executor:
             name: opam/opam_workbench
             opam_image_tag: debian-10-ocaml-4.09
+          depext_pkgs: conf-m4
 ######
