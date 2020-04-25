@@ -4,14 +4,7 @@ version: 2.1
 orbs:
   opam: argent-smith/opam@1.0.1
 
-x-job-defaults_debian: &job_defaults_debian
-  executor:
-    name: opam/default
-    image: ocaml/opam2
-    tag: debian-10-ocaml-4.09
-  depext_pkgs: conf-m4
-
-x-job-defaults_alpine: &job_defaults_alpine
+x-job-defaults: &job_defaults
   executor:
     name: opam/default
     image: ocaml/opam2
@@ -19,15 +12,7 @@ x-job-defaults_alpine: &job_defaults_alpine
   depext_pkgs: conf-m4
 
 workflows:
-  test_debian:
+  ci:
     jobs:
       - opam/run_tests:
-          <<: *job_defaults_debian
-      - opam/build_package:
-          <<: *job_defaults_debian
-  test_alpine:
-    jobs:
-      - opam/run_tests:
-          <<: *job_defaults_alpine
-      - opam/build_package:
-          <<: *job_defaults_alpine
+          <<: *job_defaults
