@@ -2,7 +2,7 @@
 version: 2.1
 
 orbs:
-  opam: argent-smith/opam@dev:8d9a416
+  opam: argent-smith/opam@1.0.1
 
 x-job-defaults_debian: &job_defaults_debian
   executor:
