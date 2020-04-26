@@ -2,7 +2,7 @@
 version: 2.1
 
 orbs:
-  opam: argent-smith/opam@1.0.1
+  opam: argent-smith/opam@dev:1d89e88
 
 executors:
   opam: opam/default
@@ -12,7 +12,10 @@ x-job-defaults: &job_defaults
     name: opam
     image: ocaml/opam2
     tag: alpine-3.11-ocaml-4.09
+  switch_name: '4.09'
   depext_pkgs: conf-m4
+  cache_depends: true
+  depends_cache_reference_file: rpiterm.opam
 
 workflows:
   ci:
